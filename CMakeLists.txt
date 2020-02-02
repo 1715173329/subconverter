@@ -9,6 +9,7 @@ ADD_DEFINITIONS(-Wall -Wextra -Wno-unused-parameter -Wno-unused-result)
 
 OPTION(USING_STD_REGEX "Use std::regex from C++ library instead of PCRE2." OFF)
 OPTION(USING_MALLOC_TRIM "Call malloc_trim after processing request to lower memory usage (Your system must support malloc_trim)." OFF)
+OPTION(USING_MBEDTLS "Use mbedTLS instead of OpenSSL for MD5 calculation." OFF)
 
 INCLUDE(CheckCXXSourceCompiles)
 CHECK_CXX_SOURCE_COMPILES(
@@ -77,11 +78,9 @@ TARGET_LINK_LIBRARIES(subconverter ${YAML_CPP_LIBRARY})
 IF(USING_STD_REGEX STREQUAL "ON")
     ADD_DEFINITIONS(-DUSE_STD_REGEX)
 ELSE()
-    PKG_CHECK_MODULES(PCRE2 libpcre2-8 REQUIRED)
-    FIND_LIBRARY(PCRE2_LIBRARY NAMES pcre2-8 PATHS ${PCRE2_LIBRARY_DIRS})
+    FIND_PACKAGE(PCRE2 REQUIRED)
     INCLUDE_DIRECTORIES(${PCRE2_INCLUDE_DIRS})
-    LINK_DIRECTORIES(${PCRE2_LIBRARY_DIRS})
-    TARGET_LINK_LIBRARIES(subconverter ${PCRE2_LIBRARIES})
+    TARGET_LINK_LIBRARIES(subconverter ${PCRE2_LIBRARY})
     ADD_DEFINITIONS(-DPCRE2_STATIC)
   
     FIND_PACKAGE(JPCRE2 REQUIRED)
