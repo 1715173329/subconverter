@@ -11,9 +11,6 @@ cmake -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF . > /dev/null
 make install -j4 > /dev/null
 cd ..
 
-curl -LO https://raw.githubusercontent.com/jpcre2/jpcre2/release/src/jpcre2.hpp
-cp jpcre2.hpp /usr/local/include/
-
 cmake .
 make -j4
 g++ -o base/subconverter CMakeFiles/subconverter.dir/src/*.o  -static -lpcre2-8 -levent -lyaml-cpp -lcurl -lnghttp2 -lssl -lcrypto -lz -lbz2 -ldl -lpthread -O3 -s  
